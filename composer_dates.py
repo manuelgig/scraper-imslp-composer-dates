@@ -3,6 +3,15 @@
 Created on Sat Jun  6 16:06:22 2020
 
 @author: Manuel Gigena
+
+The script creates the function composerDates(). The function takes a list of composer names taken from IMSLP and scrapes their IMSLP webpages to collect their birth and death year. It returns a pandas df
+wherein each row has a composer name birth and death years (if available and retrieved), the length of each year (e.g., 1984 -> 4), and a column showing whether
+the composers' info could be retrieved (yes/no). Additionally, the function writes the df to a .csv file.
+
+Args are:
+    composer_names: a pandas series with composers names as they appear in IMSLP
+    wd: the working directory
+    output_file: a filename wherein to write results (e.g., 'file.csv')
 """
 
 from bs4 import BeautifulSoup
@@ -77,7 +86,7 @@ def composerDates(composer_names,wd,output_file='composer_dates.csv'):
             processed.append([comp_name,born,death,len_born,len_death,'yes'])
           
         except:
-            print('hubo algún problema al procesar {}'.format(comp_name))
+            print('Hubo algún problema al procesar {}'.format(comp_name))
             processed.append([comp_name,np.NaN,np.NaN,np.NaN,np.NaN,'no'])
             continue
         
@@ -86,10 +95,12 @@ def composerDates(composer_names,wd,output_file='composer_dates.csv'):
         
     return processed
 
-# Example using composers from a list of IMSLP composer names
+"""" Example using composers from a list of IMSLP composer names
 
-path = r'C:/Users/m/Google Drive/27 musica en xml/06_varios/'.replace('\\','/')+'/'
+path = r'C:/Users/docs/'.replace('\\','/')+'/'
 composer_series = pd.read_csv('{}composer_names.csv'.format(path),encoding="utf-8").composer
 
 test = composerDates(composer_series[:10],path)
+
+""""
 
